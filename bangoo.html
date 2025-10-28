@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bangoo Translator — ZZZ</title>
+  <style>
+    :root{--bg:#071227;--card:#081428;--muted:#9fb9df;--accent:#2b6ce4;--glass:rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#041022 0%, #071427 100%);color:#e6eef8}
+    .wrap{max-width:980px;margin:28px auto;padding:18px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+    h1{margin:0;font-size:20px}
+    .tiny{font-size:13px;color:var(--muted);margin-top:6px}
+    label{display:block;margin-top:12px;color:var(--muted);font-size:13px}
+    textarea, input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:var(--bg);color:inherit}
+    .controls{display:flex;gap:8px;margin-top:12px;align-items:center}
+    button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
+    .output{white-space:pre-wrap;background:#041226;padding:12px;border-radius:8px;margin-top:12px;border:1px solid #123047;min-height:80px}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .meta{margin-top:12px;font-size:13px;color:var(--muted)}
+    .small{font-size:12px;color:var(--muted)}
+    .badge{background:var(--glass);padding:6px;border-radius:8px;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Bangoo Translator — ZZZ (Bangboo mode)</h1>
+      <div class="tiny">Tento režim vygeneruje Bangboo-fráze inspirované "Ehn-ne / Ehn-na / En-noo" stylem. Každé slovo dostane náhodnou zvukovou frázi a do závorky se přidá původní slovo.</div>
+
+      <label>Vstupní text</label>
+      <textarea id="input" placeholder="Napiš text..." rows="6">Hello boss! Yes, I will defeat the boss.</textarea>
+
+      <div class="controls">
+        <button id="translateBtn">Generovat Bangboo</button>
+        <button id="copyBtn">Kopírovat</button>
+        <button id="downloadBtn">Stáhnout .txt</button>
+        <div style="margin-left:auto" class="small">Režim: <strong>Bangboo only</strong></div>
+      </div>
+
+      <label>Výstup</label>
+      <div id="output" class="output"></div>
+
+      <div class="meta">Poznámky: <span class="small">Slovník rozpozná ANO/YES/JO jako speciální ("Eh" varianty), NE/NO jako "Ehn-noo". Pokud není kategorie jasná, použije se <code>uh</code> styl.</span></div>
+
+      <h3 class="small">Jak to funguje (stručně)</h3>
+      <div class="small">Každé slovo se klasifikuje do jedné z kategorií (Ano, Ne, Pozdravy, Postavy, Emoce, Ostatní). Poté generátor náhodně vybere jednu z mnoha frází pro tu kategorii, aplikuje drobné obměny (tilde ~, zdvojení slabiky, grunt) a přidá do závorky původní slovo.</div>
+    </div>
+  </div>
+
+<script>
+/* Bangoo translator — single-file
+   Behavior per user spec:
+   - categories with many variations (Q2: D = many)
+   - if uncertain use 'uh' style
+   - yes/no mapping
+   - output includes original word in parentheses
+*/
+
+// --- Category dictionaries (large sets) ---
+const DICTS = {
+  yes: [
+    'Eh','Ehn-ne','Eh-na','Ehn','Ehn-na','Wutah','Wuta','Wuh-eh','E-na','Eh-eh','Ehn-wah','Ehn-o','Eh-oo','E-wha','Eh-la','Ehn-la','Eh-doo','Eh-bo','Ehn-too','Ehn-yah'
+  ],
+  no: [
+    'Ehn-noo','Noo-eh','Nah-noo','En-noo','Nuh-eh','Ehn-nah','En-nah','Noo-wa','Naa-noo','Ehn-bu','Noo-ba','Neh-no','En-boo','Ehn-wah','Noo-yah','Ehn-uh','Nuh-nah','En-doo','Noo-na','E-noo'
+  ],
+  greetings: [
+    'Wah-ne~','Wata-wa~','Wa-na','Wah-wah','Wah-eh','Wah-na-na','Wa-too','Wah-lu','Wah-yii','Wata-na','Wuhu~','Wa-rah','Wah-boo','Wa-na~','Wah-la','Wu-nah','Wah-da','Wah-ee','Wah-loo','Wah-yo'
+  ],
+  characters: [
+    'Bango-na','Wuta-na','Wata-wa','Bang-na','Bango-boo','Wun-ta','Bang-bang','Wuta-wah','Bun-nah','Banga-na','Wun-boo','Wata-nah','Bun-boo','Wah-bang','Banga-doo','Wuta-doo','Bun-ta','Wah-noo','Bango-yah','Wun-yah'
+  ],
+  emotions: [
+    'Ña-eh','Nga-na','Ah-ah~','Nga-woo','Ña-na','Nya-eh','Oh-na','A-nya','Nga-yo','Ña-boo','Ah-yah','Nga-la','Ña-da','A-na','Nga-wah','Ña-ree','Nga-doo','Ah-noo','Ña-nah','Nga-eh'
+  ],
+  default: [
+    'Uh-eh','Uh-na~','Uh-noo','Uh-wah','Uh-uh','Uh-boo','Uh-yah','Uh-da','Uh-la','Uh-roo','Uh-nee','Uh-ta','Uh-oo','Uh-ahi','Uh-na','Uh-zee','Uh-moo','Uh-wee','Uh-za','Uh-ya'
+  ],
+  gruntExtras: ['~','~','','','','~','~','~~','']
+};
+
+// Words to map explicitly to categories
+const YES_WORDS = new Set(['yes','ano','jo','yep','yeah','ok','okay','sure','si']);
+const NO_WORDS = new Set(['no','ne','nop','nope','nah','never']);
+const GREET_WORDS = new Set(['hello','hi','ahoj','čau','hey','yo']);
+const CHAR_WORDS = new Set(['boss','enemy','slayer','agent','soldier','guy','npc','enemy','foe','monster']);
+const EMO_WORDS = new Set(['thanks','thank','díky','sorry','love','hate','sad','happy','thx','ty','gracias']);
+
+// helpers
+function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function randChance(p){ return Math.random() < p; }
+
+function classifyWord(wordLower){
+  if(YES_WORDS.has(wordLower)) return 'yes';
+  if(NO_WORDS.has(wordLower)) return 'no';
+  if(GREET_WORDS.has(wordLower)) return 'greetings';
+  if(CHAR_WORDS.has(wordLower)) return 'characters';
+  if(EMO_WORDS.has(wordLower)) return 'emotions';
+  // detect punctuation-only
+  if(!/[\p{L}]/u.test(wordLower)) return 'punct';
+  // numbers => default
+  if(/^\d+$/.test(wordLower)) return 'default';
+  // otherwise ambiguous
+  return 'unknown';
+}
+
+function makeBangbooFor(word){
+  // keep punctuation as is
+  if(!/[\p{L}]/u.test(word)) return word;
+
+  const core = word.replace(/[.,!?;:()"'«»]/g,'');
+  const trailing = word.slice(core.length);
+  const lc = core.toLowerCase();
+  const cat = classifyWord(lc);
+  let phrase;
+
+  if(cat === 'punct') return word; // return punctuation
+
+  if(cat === 'unknown'){
+    // use 'uh' style as fallback
+    phrase = choose(DICTS.default);
+  } else {
+    phrase = choose(DICTS[cat]);
+  }
+
+  // random embellishments
+  // sometimes add grunt from extras
+  const extra = choose(DICTS.gruntExtras);
+  if(extra) phrase = phrase + extra;
+
+  // sometimes double a syllable (simple heuristic)
+  if(randChance(0.18)){
+    // split on hyphen or dash
+    const parts = phrase.split(/[-–—]/);
+    if(parts.length>1){
+      parts[0] = parts[0] + '-' + parts[0];
+      phrase = parts.join('-');
+    } else {
+      // duplicate first 3 chars if exist
+      const prefix = phrase.slice(0,3);
+      phrase = prefix + '-' + phrase;
+    }
+  }
+
+  // sometimes lowercase/uppercase handling: preserve capital if original was capitalized
+  if(/^[A-ZÁČĎÉÍŇÓŘŠŤÚŮÝ]/.test(core)){
+    phrase = phrase.charAt(0).toUpperCase() + phrase.slice(1);
+  }
+
+  // append original in parentheses
+  const out = `${phrase} (${core})${trailing}`;
+  return out;
+}
+
+// Main translator: split text into tokens but keep punctuation and spaces
+function translateText(text){
+  // tokenise into words and non-words (preserve spaces/punctuation)
+  const parts = [];
+  let cur = '';
+  let curIsLetter = null;
+  for(const ch of text){
+    const isLetter = /[\p{L}]/u.test(ch) || /[0-9]/.test(ch);
+    if(cur === ''){ cur = ch; curIsLetter = isLetter; }
+    else if(isLetter === curIsLetter){ cur += ch; }
+    else { parts.push(cur); cur = ch; curIsLetter = isLetter; }
+  }
+  if(cur) parts.push(cur);
+
+  // translate each part
+  let lastPhrase = null;
+  const outParts = parts.map(p => {
+    if(/[\p{L}0-9]/u.test(p)){
+      // word
+      // avoid repeating same phrase twice in a row
+      let candidate = makeBangbooFor(p);
+      if(candidate === lastPhrase){
+        // try up to 3 times to get a different one
+        for(let i=0;i<3;i++){
+          candidate = makeBangbooFor(p);
+          if(candidate !== lastPhrase) break;
+        }
+      }
+      lastPhrase = candidate;
+      return candidate;
+    } else {
+      return p; // spaces/punct
+    }
+  });
+
+  return outParts.join('');
+}
+
+// UI wiring
+const inputEl = document.getElementById('input');
+const outEl = document.getElementById('output');
+const btn = document.getElementById('translateBtn');
+const copyBtn = document.getElementById('copyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+
+function doTranslate(){
+  const text = inputEl.value || '';
+  const res = translateText(text);
+  outEl.textContent = res;
+}
+
+btn.addEventListener('click', ()=>doTranslate());
+
+copyBtn.addEventListener('click', async ()=>{
+  try{ await navigator.clipboard.writeText(outEl.textContent); copyBtn.textContent='Zkopírováno!'; setTimeout(()=>copyBtn.textContent='Kopírovat',900); }
+  catch(e){ alert('Kopírování selhalo: '+e.message); }
+});
+
+downloadBtn.addEventListener('click', ()=>{
+  const blob = new Blob([outEl.textContent], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='bangboo_output.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+
+// initial run
+window.addEventListener('load', ()=>doTranslate());
+</script>
+</body>
+</html>
