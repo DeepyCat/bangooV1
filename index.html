@@ -1,228 +1,277 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bangoo Translator — ZZZ</title>
-  <style>
-    :root{--bg:#071227;--card:#081428;--muted:#9fb9df;--accent:#2b6ce4;--glass:rgba(255,255,255,0.03)}
-    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#041022 0%, #071427 100%);color:#e6eef8}
-    .wrap{max-width:980px;margin:28px auto;padding:18px}
-    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
-    h1{margin:0;font-size:20px}
-    .tiny{font-size:13px;color:var(--muted);margin-top:6px}
-    label{display:block;margin-top:12px;color:var(--muted);font-size:13px}
-    textarea, input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:var(--bg);color:inherit}
-    .controls{display:flex;gap:8px;margin-top:12px;align-items:center}
-    button{background:var(--accent);color:white;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
-    .output{white-space:pre-wrap;background:#041226;padding:12px;border-radius:8px;margin-top:12px;border:1px solid #123047;min-height:80px}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    .meta{margin-top:12px;font-size:13px;color:var(--muted)}
-    .small{font-size:12px;color:var(--muted)}
-    .badge{background:var(--glass);padding:6px;border-radius:8px;font-size:12px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bangboo Translator</title>
+<style>
+  :root{
+    --bg:#05060b;
+    --panel:#071426;
+    --muted:#8fb5df;
+    --accent:#4dd0ff;
+    --glass:rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#020306,#091021);color:#e6f5ff;min-height:100vh}
+  .wrap{max-width:980px;margin:28px auto;padding:18px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,.6)}
+  h1{margin:0;font-size:20px}
+  .lead{color:var(--muted);margin-top:6px;font-size:13px}
+  label{display:block;margin-top:14px;color:var(--muted);font-size:13px}
+  textarea{width:100%;min-height:120px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:var(--panel);color:inherit;font-size:15px;resize:vertical}
+  .controls{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+  button{background:var(--accent);color:#041022;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+  .right{margin-left:auto;color:var(--muted);font-size:13px}
+  .output{background:#031323;padding:14px;border-radius:10px;margin-top:12px;border:1px solid rgba(255,255,255,0.03);min-height:90px;white-space:pre-wrap}
+  .phrase{display:inline-block;padding:8px 10px;margin:6px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);cursor:pointer;color:#dbefff}
+  .phrase:hover{box-shadow:0 6px 18px rgba(0,0,0,0.6);transform:translateY(-3px)}
+  .note{margin-top:10px;color:var(--muted);font-size:13px}
+  .small{font-size:13px;color:var(--muted)}
+  .panel{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .card-small{background:rgba(255,255,255,0.01);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);min-width:220px}
+  input[type=text]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:var(--panel);color:inherit}
+</style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Bangoo Translator — ZZZ (Bangboo mode)</h1>
-      <div class="tiny">Tento režim vygeneruje Bangboo-fráze inspirované "Ehn-ne / Ehn-na / En-noo" stylem. Každé slovo dostane náhodnou zvukovou frázi a do závorky se přidá původní slovo.</div>
+      <h1>Bangboo Translator</h1>
+      
 
-      <label>Vstupní text</label>
-      <textarea id="input" placeholder="Napiš text..." rows="6">Hello boss! Yes, I will defeat the boss.</textarea>
+      <label>Vstup</label>
+      <textarea id="input" placeholder="Napiš text..."></textarea>
 
       <div class="controls">
-        <button id="translateBtn">Generovat Bangboo</button>
-        <button id="copyBtn">Kopírovat</button>
-        <button id="downloadBtn">Stáhnout .txt</button>
-        <div style="margin-left:auto" class="small">Režim: <strong>Bangboo only</strong></div>
+        <button id="translateBtn">Translate → Bangboo</button>
+        <button id="copyBtn" class="ghost">Copy Output</button>
+        <button id="exportBtn" class="ghost">Export mappings</button>
+        <button id="importBtn" class="ghost">Import mappings</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none">
+        
       </div>
-
+        <a href="./ZZZ.html" ><div class="small">Feet</div></a>
       <label>Výstup</label>
       <div id="output" class="output"></div>
 
-      <div class="meta">Poznámky: <span class="small">Slovník rozpozná ANO/YES/JO jako speciální ("Eh" varianty), NE/NO jako "Ehn-noo". Pokud není kategorie jasná, použije se <code>uh</code> styl.</span></div>
+      <div class="panel">
+        <div class="card-small">
+          <div class="small">Vybraný mapping</div>
+          <div id="selectedInfo" class="small">Klikni na frázi pro uložit jako mapping</div>
+          <div style="margin-top:8px">
+            <input id="mapWord" type="text" placeholder="Původní slovo (doplní se automaticky)">
+            <button id="saveMap" class="ghost" style="margin-top:6px">Save mapping</button>
+            <button id="delMap" class="ghost" style="margin-top:6px">Delete mapping</button>
+          </div>
+        </div>
 
-      <h3 class="small">Jak to funguje (stručně)</h3>
-      <div class="small">Každé slovo se klasifikuje do jedné z kategorií (Ano, Ne, Pozdravy, Postavy, Emoce, Ostatní). Poté generátor náhodně vybere jednu z mnoha frází pro tu kategorii, aplikuje drobné obměny (tilde ~, zdvojení slabiky, grunt) a přidá do závorky původní slovo.</div>
-      <a href="./ZZZ.html" target="_blank" rel="noopener noreferrer"><div class="small">Feet</div></a>
+        <div class="card-small">
+          <div class="small">Quick</div>
+          <div style="margin-top:8px">
+            <button id="clearMaps" class="ghost">Clear saved mappings</button>
+            <button id="resetDefault" class="ghost">Reset defaults</button>
+          </div>
+        </div>
+      </div>
+
+      
     </div>
   </div>
 
 <script>
-/* Bangoo translator — single-file
-   Behavior per user spec:
-   - categories with many variations (Q2: D = many)
-   - if uncertain use 'uh' style
-   - yes/no mapping
-   - output includes original word in parentheses
-*/
-
-// --- Category dictionaries (large sets) ---
+/* Final Bangboo translator — no audio, one-bracket per full text, copy output */
 const DICTS = {
-  yes: [
-    'Eh','Ehn-ne','Eh-na','Ehn','Ehn-na','Wutah','Wuta','Wuh-eh','E-na','Eh-eh','Ehn-wah','Ehn-o','Eh-oo','E-wha','Eh-la','Ehn-la','Eh-doo','Eh-bo','Ehn-too','Ehn-yah'
-  ],
-  no: [
-    'Ehn-noo','Noo-eh','Nah-noo','En-noo','Nuh-eh','Ehn-nah','En-nah','Noo-wa','Naa-noo','Ehn-bu','Noo-ba','Neh-no','En-boo','Ehn-wah','Noo-yah','Ehn-uh','Nuh-nah','En-doo','Noo-na','E-noo'
-  ],
-  greetings: [
-    'Wah-ne~','Wata-wa~','Wa-na','Wah-wah','Wah-eh','Wah-na-na','Wa-too','Wah-lu','Wah-yii','Wata-na','Wuhu~','Wa-rah','Wah-boo','Wa-na~','Wah-la','Wu-nah','Wah-da','Wah-ee','Wah-loo','Wah-yo'
-  ],
-  characters: [
-    'Bango-na','Wuta-na','Wata-wa','Bang-na','Bango-boo','Wun-ta','Bang-bang','Wuta-wah','Bun-nah','Banga-na','Wun-boo','Wata-nah','Bun-boo','Wah-bang','Banga-doo','Wuta-doo','Bun-ta','Wah-noo','Bango-yah','Wun-yah'
-  ],
-  emotions: [
-    'Ña-eh','Nga-na','Ah-ah~','Nga-woo','Ña-na','Nya-eh','Oh-na','A-nya','Nga-yo','Ña-boo','Ah-yah','Nga-la','Ña-da','A-na','Nga-wah','Ña-ree','Nga-doo','Ah-noo','Ña-nah','Nga-eh'
-  ],
-  default: [
-    'Uh-eh','Uh-na~','Uh-noo','Uh-wah','Uh-uh','Uh-boo','Uh-yah','Uh-da','Uh-la','Uh-roo','Uh-nee','Uh-ta','Uh-oo','Uh-ahi','Uh-na','Uh-zee','Uh-moo','Uh-wee','Uh-za','Uh-ya'
-  ],
-  gruntExtras: ['~','~','','','','~','~','~~','']
+  yes: ['Eh','Ehn-ne','Eh-na','Ehn','Ehn-na','Wutah','Wuta','Wuh-eh','E-na','Eh-eh','Ehn-wah','Ehn-o','Eh-oo','E-wha','Eh-la','Ehn-la','Eh-doo'],
+  no: ['Ehn-noo','Noo-eh','Nah-noo','En-noo','Nuh-eh','Ehn-nah','En-nah','Noo-wa','Naa-noo','Ehn-bu','Noo-ba','Neh-no','En-boo','Ehn-wah','Noo-yah','Ehn-uh'],
+  greetings: ['Wah-ne~','Wata-wa~','Wa-na','Wah-wah','Wah-eh','Wah-na-na','Wa-too','Wah-lu','Wah-yii','Wata-na','Wuhu~','Wa-rah'],
+  characters: ['Bango-na','Wuta-na','Wata-wa','Bang-na','Bango-boo','Wun-ta','Bang-bang','Wuta-wah','Bun-nah','Banga-na','Wun-boo','Wata-nah'],
+  emotions: ['Ña-eh','Nga-na','Ah-ah~','Nga-woo','Ña-na','Nya-eh','Oh-na','A-nya','Nga-yo','Ña-boo'],
+  default: ['Uh-eh','Uh-na~','Uh-noo','Uh-wah','Uh-uh','Uh-boo','Uh-yah','Uh-da','Uh-ta','Uh-oo'],
+  extras: ['~','~~','','~','']
 };
 
-// Words to map explicitly to categories
+// category words
 const YES_WORDS = new Set(['yes','ano','jo','yep','yeah','ok','okay','sure','si']);
 const NO_WORDS = new Set(['no','ne','nop','nope','nah','never']);
 const GREET_WORDS = new Set(['hello','hi','ahoj','čau','hey','yo']);
-const CHAR_WORDS = new Set(['boss','enemy','slayer','agent','soldier','guy','npc','enemy','foe','monster']);
+const CHAR_WORDS = new Set(['boss','enemy','slayer','agent','soldier','guy','npc','foe','monster']);
 const EMO_WORDS = new Set(['thanks','thank','díky','sorry','love','hate','sad','happy','thx','ty','gracias']);
+
+// storage keys
+const MAP_KEY = 'bangboo_mappings_v_final';
+let mappings = JSON.parse(localStorage.getItem(MAP_KEY) || '{}');
+
+function saveMappings(){ localStorage.setItem(MAP_KEY, JSON.stringify(mappings)); }
 
 // helpers
 function choose(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function randChance(p){ return Math.random() < p; }
-
-function classifyWord(wordLower){
-  if(YES_WORDS.has(wordLower)) return 'yes';
-  if(NO_WORDS.has(wordLower)) return 'no';
-  if(GREET_WORDS.has(wordLower)) return 'greetings';
-  if(CHAR_WORDS.has(wordLower)) return 'characters';
-  if(EMO_WORDS.has(wordLower)) return 'emotions';
-  // detect punctuation-only
-  if(!/[\p{L}]/u.test(wordLower)) return 'punct';
-  // numbers => default
-  if(/^\d+$/.test(wordLower)) return 'default';
-  // otherwise ambiguous
+function classifyWord(w){
+  const s = w.toLowerCase();
+  if(YES_WORDS.has(s)) return 'yes';
+  if(NO_WORDS.has(s)) return 'no';
+  if(GREET_WORDS.has(s)) return 'greetings';
+  if(CHAR_WORDS.has(s)) return 'characters';
+  if(EMO_WORDS.has(s)) return 'emotions';
+  if(!/[\p{L}]/u.test(s)) return 'punct';
+  if(/^\d+$/.test(s)) return 'default';
   return 'unknown';
 }
 
-function makeBangbooFor(word){
-  // keep punctuation as is
-  if(!/[\p{L}]/u.test(word)) return word;
-
-  const core = word.replace(/[.,!?;:()"'«»]/g,'');
-  const trailing = word.slice(core.length);
+function makePhrase(core){
   const lc = core.toLowerCase();
-  const cat = classifyWord(lc);
+  if(mappings[lc]) return mappings[lc];
+  const cat = classifyWord(core);
   let phrase;
-
-  if(cat === 'punct') return word; // return punctuation
-
-  if(cat === 'unknown'){
-    // use 'uh' style as fallback
-    phrase = choose(DICTS.default);
-  } else {
-    phrase = choose(DICTS[cat]);
+  if(cat === 'unknown') phrase = choose(DICTS.default);
+  else phrase = choose(DICTS[cat]);
+  // slight embellish sometimes
+  if(Math.random() < 0.18){
+    const extra = choose(DICTS.extras);
+    phrase = phrase + extra;
   }
-
-  // random embellishments
-  // sometimes add grunt from extras
-  const extra = choose(DICTS.gruntExtras);
-  if(extra) phrase = phrase + extra;
-
-  // sometimes double a syllable (simple heuristic)
-  if(randChance(0.18)){
-    // split on hyphen or dash
-    const parts = phrase.split(/[-–—]/);
-    if(parts.length>1){
-      parts[0] = parts[0] + '-' + parts[0];
-      phrase = parts.join('-');
-    } else {
-      // duplicate first 3 chars if exist
-      const prefix = phrase.slice(0,3);
-      phrase = prefix + '-' + phrase;
-    }
-  }
-
-  // sometimes lowercase/uppercase handling: preserve capital if original was capitalized
-  if(/^[A-ZÁČĎÉÍŇÓŘŠŤÚŮÝ]/.test(core)){
-    phrase = phrase.charAt(0).toUpperCase() + phrase.slice(1);
-  }
-
-  // append original in parentheses
-  const out = `${phrase} (${core})${trailing}`;
-  return out;
+  return phrase;
 }
 
-// Main translator: split text into tokens but keep punctuation and spaces
-function translateText(text){
-  // tokenise into words and non-words (preserve spaces/punctuation)
+// split preserving punctuation/spaces
+function tokenize(text){
   const parts = [];
-  let cur = '';
-  let curIsLetter = null;
+  let cur=''; let curIsLetter=null;
   for(const ch of text){
-    const isLetter = /[\p{L}]/u.test(ch) || /[0-9]/.test(ch);
-    if(cur === ''){ cur = ch; curIsLetter = isLetter; }
-    else if(isLetter === curIsLetter){ cur += ch; }
-    else { parts.push(cur); cur = ch; curIsLetter = isLetter; }
+    const isLetter = /[\p{L}0-9]/u.test(ch);
+    if(cur===''){ cur=ch; curIsLetter=isLetter; }
+    else if(isLetter === curIsLetter){ cur+=ch; }
+    else { parts.push(cur); cur=ch; curIsLetter=isLetter; }
   }
   if(cur) parts.push(cur);
+  return parts;
+}
 
-  // translate each part
-  let lastPhrase = null;
-  const outParts = parts.map(p => {
+// render output: phrases clickable (no audio)
+const outputEl = document.getElementById('output');
+let lastGenerated = {phrases:[], original:''};
+let selected = null;
+
+function render(text){
+  outputEl.innerHTML = '';
+  const parts = tokenize(text);
+  const phraseNodes = [];
+  const originals = [];
+  parts.forEach(p=>{
     if(/[\p{L}0-9]/u.test(p)){
-      // word
-      // avoid repeating same phrase twice in a row
-      let candidate = makeBangbooFor(p);
-      if(candidate === lastPhrase){
-        // try up to 3 times to get a different one
-        for(let i=0;i<3;i++){
-          candidate = makeBangbooFor(p);
-          if(candidate !== lastPhrase) break;
-        }
-      }
-      lastPhrase = candidate;
-      return candidate;
+      const core = p.replace(/[.,!?;:()"'«»]/g,'');
+      const trailing = p.slice(core.length);
+      const phrase = makePhrase(core);
+      originals.push(core);
+      const span = document.createElement('span');
+      span.className='phrase';
+      span.textContent = phrase;
+      span.dataset.phrase = phrase;
+      span.dataset.original = core;
+      span.addEventListener('click', ()=>{ onPhraseClick(span); });
+      outputEl.appendChild(span);
+      if(trailing) outputEl.appendChild(document.createTextNode(trailing));
     } else {
-      return p; // spaces/punct
+      outputEl.appendChild(document.createTextNode(p));
     }
   });
+  // final parentheses with original full text (variant A: one bracket for full text)
+  const br = document.createElement('div');
+  br.style.marginTop='10px';
+  br.style.color='var(--muted)';
+  br.textContent = `(${text.trim()})`;
+  outputEl.appendChild(br);
 
-  return outParts.join('');
+  // store last generated (for copy)
+  lastGenerated = {phrases: Array.from(outputEl.querySelectorAll('.phrase')).map(s=>s.textContent).join(' '), original: text.trim()};
 }
 
-// UI wiring
-const inputEl = document.getElementById('input');
-const outEl = document.getElementById('output');
-const btn = document.getElementById('translateBtn');
-const copyBtn = document.getElementById('copyBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-
-function doTranslate(){
-  const text = inputEl.value || '';
-  const res = translateText(text);
-  outEl.textContent = res;
+function onPhraseClick(span){
+  selected = {phrase: span.dataset.phrase, original: span.dataset.original};
+  document.getElementById('selectedInfo').textContent = `${selected.phrase}  —  (${selected.original})`;
+  document.getElementById('mapWord').value = selected.original;
 }
 
-btn.addEventListener('click', ()=>doTranslate());
-
-copyBtn.addEventListener('click', async ()=>{
-  try{ await navigator.clipboard.writeText(outEl.textContent); copyBtn.textContent='Zkopírováno!'; setTimeout(()=>copyBtn.textContent='Kopírovat',900); }
-  catch(e){ alert('Kopírování selhalo: '+e.message); }
+// button wiring
+document.getElementById('translateBtn').addEventListener('click', ()=>{
+  const txt = document.getElementById('input').value || '';
+  render(txt);
 });
 
-downloadBtn.addEventListener('click', ()=>{
-  const blob = new Blob([outEl.textContent], {type:'text/plain;charset=utf-8'});
+document.getElementById('copyBtn').addEventListener('click', async ()=>{
+  // copy Bangboo phrases + newline + (original)
+  const bang = outputEl.querySelectorAll('.phrase');
+  let bangText = '';
+  if(bang.length>0){
+    bangText = Array.from(bang).map(s=>s.textContent).join(' ');
+  } else {
+    // fallback: try render to create phrases
+    const txt = document.getElementById('input').value || '';
+    render(txt);
+    const b2 = outputEl.querySelectorAll('.phrase');
+    bangText = Array.from(b2).map(s=>s.textContent).join(' ');
+  }
+  const final = `${bangText}\n(${lastGenerated.original || (document.getElementById('input').value||'')})`;
+  try{
+    await navigator.clipboard.writeText(final);
+    document.getElementById('copyBtn').textContent = 'Copied ✓';
+    setTimeout(()=>document.getElementById('copyBtn').textContent = 'Copy Output',900);
+  }catch(e){
+    alert('Kopírování selhalo: ' + e.message + '\nZkopíruj ručně: ' + final);
+  }
+});
+
+// mapping controls
+document.getElementById('saveMap').addEventListener('click', ()=>{
+  const w = (document.getElementById('mapWord').value || '').trim().toLowerCase();
+  if(!w || !selected){
+    alert('Klikni na frázi a/nebo doplň pole pro původní slovo.');
+    return;
+  }
+  mappings[w] = selected.phrase;
+  saveMappings();
+  alert(`Mapping uložen: ${w} → ${selected.phrase}`);
+});
+
+document.getElementById('delMap').addEventListener('click', ()=>{
+  const w = (document.getElementById('mapWord').value || '').trim().toLowerCase();
+  if(!w || !mappings[w]){ alert('Mapping neexistuje.'); return; }
+  delete mappings[w];
+  saveMappings();
+  alert('Mapping smazán.');
+});
+
+document.getElementById('clearMaps').addEventListener('click', ()=>{
+  if(confirm('Smazat všechny uložené mappingy?')){ mappings={}; saveMappings(); alert('Mapy smazány.'); }
+});
+
+document.getElementById('resetDefault').addEventListener('click', ()=>{
+  mappings = {}; saveMappings(); alert('Mappings resetovány na prázdné (výchozí generování z DICTS).');
+});
+
+// export/import mappings
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  const payload = {mappings, exportedAt: new Date().toISOString()};
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='bangboo_output.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  const a = document.createElement('a'); a.href=url; a.download='bangboo_mappings.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
+document.getElementById('importBtn').addEventListener('click', ()=>document.getElementById('importFile').click());
+document.getElementById('importFile').addEventListener('change', (ev)=>{
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = e=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      if(data.mappings){ mappings = data.mappings; saveMappings(); alert('Import mappingů dokončen.'); }
+      else alert('Nepodařilo se najít mappings v souboru.');
+    }catch(err){ alert('Import selhal: ' + err.message); }
+  };
+  r.readAsText(f);
 });
 
-// initial run
-window.addEventListener('load', ()=>doTranslate());
+// initial render on load
+window.addEventListener('load', ()=>{ document.getElementById('translateBtn').click(); });
 </script>
 </body>
 </html>
-
-
