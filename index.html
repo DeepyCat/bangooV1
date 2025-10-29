@@ -87,8 +87,10 @@ const DICTS = {
   greetings: ['Wah-ne~','Wata-wa~','Wa-na','Wah-wah','Wah-eh','Wah-na-na','Wa-too','Wah-lu','Wah-yii','Wata-na','Wuhu~','Wa-rah'],
   characters: ['Bango-na','Wuta-na','Wata-wa','Bang-na','Bango-boo','Wun-ta','Bang-bang','Wuta-wah','Bun-nah','Banga-na','Wun-boo','Wata-nah'],
   emotions: ['Ña-eh','Nga-na','Ah-ah~','Nga-woo','Ña-na','Nya-eh','Oh-na','A-nya','Nga-yo','Ña-boo'],
-  default: ['Uh-eh','Uh-na~','Uh-noo','Uh-wah','Uh-uh','Uh-boo','Uh-yah','Uh-da','Uh-ta','Uh-oo'],
+  default: ['Uh-eh','Uh-na~','Uh-noo','Uh-wah','Uh-uh','Uh-boo','Uh-yah','Uh-da','Uh-ta','Uh-oo','Nah-noo-nah','Noo-nah',''],
+  asi: ['Ih-eh','Ih-na','Ih-noo','Ih-wah','Ih-uh','Ih-boo','If-yah','If-oo'],
   extras: ['~','~~','','~','']
+  
 };
 
 // category words
@@ -97,6 +99,7 @@ const NO_WORDS = new Set(['no','ne','nop','nope','nah','never']);
 const GREET_WORDS = new Set(['hello','hi','ahoj','čau','hey','yo']);
 const CHAR_WORDS = new Set(['boss','enemy','slayer','agent','soldier','guy','npc','foe','monster']);
 const EMO_WORDS = new Set(['thanks','thank','díky','sorry','love','hate','sad','happy','thx','ty','gracias']);
+const ASI_WORDS = new Set(['asi','že','jsi']);
 
 // storage keys
 const MAP_KEY = 'bangboo_mappings_v_final';
@@ -113,6 +116,7 @@ function classifyWord(w){
   if(GREET_WORDS.has(s)) return 'greetings';
   if(CHAR_WORDS.has(s)) return 'characters';
   if(EMO_WORDS.has(s)) return 'emotions';
+  if(ASI_WORDS.has(s)) return 'asi';
   if(!/[\p{L}]/u.test(s)) return 'punct';
   if(/^\d+$/.test(s)) return 'default';
   return 'unknown';
@@ -275,3 +279,4 @@ window.addEventListener('load', ()=>{ document.getElementById('translateBtn').cl
 </script>
 </body>
 </html>
+
