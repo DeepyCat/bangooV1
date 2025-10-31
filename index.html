@@ -24,6 +24,12 @@
   .controls{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
   button{background:var(--accent);color:#041022;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600; }
   button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    button {background:var(--accent);color:#041022;border:1px black;border-radius:10px;cursor:pointer;font-weight:600;font-size: 30px;scroll-padding-top: var(--glass);border-radius: 8px;cursor: pointer;transition: transform 0.2s, background-color 0.2s;}
+    button:hover {transform: scale(1.05);}
+    .padding{padding: 25px 50px 75px 100px;}
+     .obraz {display: grid;grid-template-columns: repeat(3, 1fr);gap: 10px;justify-items: center;}           
+    .obraz img {width: 400px;border-radius: 10px;transition: transform 0.2s;}
+    .obraz img:hover {transform: scale(1.05);}               
   .right{margin-left:auto;color:var(--muted);font-size:13px}
   .output{background:#031323;padding:14px;border-radius:10px;margin-top:12px;border:1px solid rgba(255,255,255,0.03);min-height:90px;white-space:pre-wrap}
   .phrase{display:inline-block;padding:8px 10px;margin:6px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);cursor:pointer;color:#dbefff}
@@ -36,15 +42,17 @@
 </style>
 <body>
     <h1>SpideGames web</h1>
-    <div class="button">
-    <a href="translator.html" target="_blank" rel="noopener noreferrer" class="ghost" style="padding-left: 40px;"><button>Transalotr</button></a> 
-    <a href="ZZZ.html" target="_blank" rel="noopener noreferrer" class="ghost" style="padding-left: 40px;" styl="padding-top: 40px"><button>ZZZ</button></a>
-    <a href="https://www.youtube.com/watch?v=Fw5j9xMnEwM" target="_blank" rel="noopener noreferrer" class="ghost" style="padding-left: 40px;" styl="padding-top: 40px"><button>ZZZ ASMR</button></a>
-     <a href="" target="_blank" rel="noopener noreferrer" class="ghost" style="padding-left: 40px;" styl="padding-top: 40px"><button>Playlist</button></a>
+    <div class="obraz">
+    <a href="translator.html" target="_blank" rel="noopener noreferrer" class="padding"><button>Transalotr</button></a> 
+    <a href="ZZZ.html" target="_blank" rel="noopener noreferrer" class="padding"><button>ZZZ</button></a>
+    <a href="https://www.youtube.com/watch?v=Fw5j9xMnEwM" target="_blank" rel="noopener noreferrer" class="padding"><button>ZZZ ASMR</button></a>
+    <a href="https://youtu.be/e80zT-558jY?si=sGlVFqOoyLENAxv1" target="_blank" rel="noopener noreferrer" class="padding"><button>Playlist</button></a>
+    <a href="" target="_blank" rel="noopener noreferrer" class="padding"><button>Pics</button></a>
+    <a href="" target="_blank" rel="noopener noreferrer" class="padding"><button>idk</button></a>
     </div>
+    <img src="https://media.tenor.com/ZnsC08opLI8AAAAi/nah-id.gif" alt="">
 </body>
 
 </html>
-
 
 
