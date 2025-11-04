@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    h1 {color: white;
+    text-shadow: 0 0 10px #00b4ff;
+      text-align: center;}
+    a {text-decoration: none;}
+    body {background-image: url('img/askbackground.png');
+    justify-content: center;
+    display: flex ;
+    align-items: center; 
+        
+}
+    button {border: #000 0px solid; background-color: rgba(0, 0, 0, 0);}
+     .buttonB {
+     display: inline-block;
+      background: #00b4ff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    
+    .buttonB:hover {
+      background: #0094cc;
+      transform: translateY(-3px);
+      box-shadow: 0 0 10px #00b4ff;
+      }
+     .buttonBl {
+     display: inline-block;
+      background: #000000;
+      color: #00b4ff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .buttonBl:hover {
+      background: #3d3d3d;
+      transform: translateY(-3px);
+      box-shadow: 0 0 10px #000000;
+      
+}
+.vse {
+    text-align: center; 
+    border: #00b4ff 3px solid;
+    border-radius: 5px;
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+    padding: 10px 10px 30px 10px;
+    margin: 25% auto;
+    
+      
+      
+      
+}
+p {color: white; font-size: 12px;}
+</style>
+<body>
+    
+    <div class="vse">
+    <h1>Je ti 18?</h1>
+    <p>Tato stránka obsahuje materiál, který není vhodný pro osoby mladší 18 let. <br>
+Může se zde vyskytovat nahota, erotické nebo explicitní motivy, které mohou být považovány za nevhodné pro mladší publikum. <br>
+
+Pokračováním potvrzuješ, že je ti alespoň 18 let, nebo že jsi dosáhl/a plnoletosti podle zákonů své země.</p>
+    <form id="ageForm">
+  <button type="button" class="buttonB" onclick="window.location.href='ZZZ.html'">
+    Ano, je mi 18
+  </button>
+  <button type="button" class="buttonBl" onclick="window.location.href='index.html'">
+    Ne, není mi 18
+  </button>
+</form>
+    </div>
+</body>
+</html>
