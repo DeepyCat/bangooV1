@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>potvrzení</title>
 </head>
 <style>
     h1 {color: white;
@@ -61,7 +61,20 @@
     background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
     padding: 10px 10px 30px 10px;
     margin: 25% auto;
-    
+.modra {
+  color: #00b4ff;
+  font-size: 18px;
+}
+.modra-mala {
+  color: #00b4ff;
+  font-weight: bold;
+}
+.cerna {
+  color: #000000;
+  font-size: 18px;
+  background-color: #0094cc;
+  border-radius: 5px;
+}   
       
       
       
@@ -71,11 +84,12 @@ p {color: white; font-size: 12px;}
 <body>
     
     <div class="vse">
+    <h2 class="modra">SpideGames web <label for="gooner" class="cerna">Gooner Edice</label></h2>
     <h1>Je ti 18?</h1>
     <p>Tato stránka obsahuje materiál, který není vhodný pro osoby mladší 18 let. <br>
 Může se zde vyskytovat nahota, erotické nebo explicitní motivy, které mohou být považovány za nevhodné pro mladší publikum. <br>
 
-Pokračováním potvrzuješ, že je ti alespoň 18 let, nebo že jsi dosáhl/a plnoletosti podle zákonů své země.</p>
+Pokračováním potvrzuješ, že je ti alespoň 18 let, nebo že jsi dosáhl/a plnoletosti <a href="https://www.zakonyprolidi.cz/cs/2009-40" class="modra-mala">podle zákonů</a> své země. </p>
     <form id="ageForm">
   <button type="button" class="buttonB" onclick="window.location.href='ZZZ.html'">
     Ano, je mi 18
