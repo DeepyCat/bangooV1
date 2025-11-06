@@ -1,43 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>img</title>
-</head>
-<style>
-    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#020306,#091021);color:#e6f5ff;min-height:100vh}
-    h1{text-align: center; font-size:20px}
- .obraz {
-      display: grid;                       
-      grid-template-columns: repeat(4, 1fr); 
-      gap: 10px;                           
-      justify-items: center;                
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Best ZZZ pics</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial;
+      background: linear-gradient(180deg, #020306, #091021);
+      color: #e6f5ff;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin: 20px 0;
+    }
+
+    .obraz {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      justify-items: center;
+      padding: 10px;
     }
 
     .obraz img {
-      width: 400px;
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
       border-radius: 10px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
 
     .obraz img:hover {
-      transform: scale(1.05);               
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     }
-</style>
-<body style="background-color: black;">
-    <h1>Best ZZZ pics</h1>
-    <div class="obraz">
-      <img src="img/20250624152924.png" alt="bell">
-      <img src="img/20250716205614.png" alt="">
-      <img src="img/20250725213035.png" alt="">
-      <img src="img/20251024192751.png" alt="">
-      <img src="img/20251025123624.png" alt="">
-      <img src="img/20251025123751.png" alt="">
-      <img src="img/20251027190018.png" alt="">
-      <img src="img/20251027185723.png" alt="">
-      <img src="img/20251027174113.png" alt="">
-    </div>
-</body>
 
+    /* --- Lightbox (zvětšení obrázku) --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .lightbox.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+      transition: color 0.2s;
+      user-select: none;
+    }
+
+    .close:hover {
+      color: #ff6666;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Best ZZZ pics</h1>
+
+  <div class="obraz">
+    <img src="img/20250624152924.png" alt="">
+    <img src="img/20250716205614.png" alt="">
+    <img src="img/20250725213035.png" alt="">
+    <img src="img/20251024192751.png" alt="">
+    <img src="img/20251025123624.png" alt="">
+    <img src="img/20251025123751.png" alt="">
+    <img src="img/20251027174113.png" alt="">
+    <img src="img/20251027185723.png" alt="">
+    <img src="img/20251027190018.png" alt="">
+    <img src="img/2025110113259.png" alt="">
+    <img src="img/20251101132759.png" alt="">
+    <img src="img/20251101132820.png" alt="">
+    <img src="img/20251101132845.png" alt="">
+    <img src="img/20251101133101.png" alt="">
+    <img src="img/20251101132124.png" alt="">
+    <img src="img/20251101133546.png" alt="">
+    
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" id="closeBtn">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.obraz img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeBtn = document.getElementById('closeBtn');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('active');
+    });
+  </script>
+</body>
 </html>
