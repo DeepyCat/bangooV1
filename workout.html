@@ -29,7 +29,7 @@
     width: 250px;
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 2px solid black;
     margin: 10px 0;
     font-size: 16px;
     text-align: center;
@@ -81,7 +81,7 @@
   background: #00b4ff;
   color: #000;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 12px 20px;
   font-size: 16px;
   font-weight: 600;
@@ -90,7 +90,7 @@
   margin-top: 20px; 
 }
 p{
-  color: black;
+  color: white;
   text-shadow: 0 0 10px #00b4ff;
 }
   .footer-img {
@@ -108,10 +108,18 @@ p{
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-100px); }
     }
+  .vse {
+    text-align: center; 
+    border: #00b4ff 3px solid;
+    border-radius: 40px;
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+    padding: 10px 10px 30px 10px;
+    margin: 25% auto;
+    }
 </style>
 </head>
 <body>
-
+<div class="vse">
 <h1>Miyabi Workout Generator </h1>
 <p>Enter your time and pick a category:</p>
 <input type="number" id="timeInput" placeholder="Minutes" min="1">
@@ -126,6 +134,7 @@ p{
 <button onclick="generateWorkout()" class="generate">✨ Generate Workout ✨</button>
 
 <div class="result" id="result"></div>
+</div>
 <div class="footer-img">
     <a href="https://tenor.com/cs/search/miyabi-gifs" target="_blank"><img src="https://media.tenor.com/ZnsC08opLI8AAAAi/nah-id.gi" alt="character"></a>
   </div>
