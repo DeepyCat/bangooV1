@@ -7,9 +7,9 @@
 <style>
   body {
     background-image: url("https://media1.tenor.com/m/IuadZ_DUSxYAAAAd/miyabi-hoshimi-miyabi.gif");
-    background-size: cover;       /* aby pokryl celou obrazovku */
-    background-position: center;  /* střed GIFu */
-    background-repeat: no-repeat; /* jen jeden GIF */
+    background-size: cover;       
+    background-position: center;  
+    background-repeat: no-repeat; 
     font-family: 'Poppins', sans-serif;
     color: white;
     min-height: 100vh;
@@ -92,6 +92,21 @@ p{
   color: black;
   text-shadow: 0 0 10px #00b4ff;
 }
+  .footer-img {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .footer-img img {
+      width: 150px;
+      animation: float 0.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-100px); }
+    }
 </style>
 </head>
 <body>
@@ -110,7 +125,9 @@ p{
 <button onclick="generateWorkout()" class="generate">✨ Generate Workout ✨</button>
 
 <div class="result" id="result"></div>
-
+<div class="footer-img">
+    <a href="https://tenor.com/cs/search/miyabi-gifs" target="_blank"><img src="https://media.tenor.com/ZnsC08opLI8AAAAi/nah-id.gi" alt="character"></a>
+  </div>
 <script>
 let selectedCategory = 'full';
 
@@ -171,3 +188,4 @@ function generateWorkout() {
 
 </body>
 </html>
+
