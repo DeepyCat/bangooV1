@@ -1,225 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Miyabi Workout Generator 🌸</title>
-  <style>
-    :root {
-      --color-hair: #545a58;
-      --color-coat: #45747b;
-      --color-skin: #fdf2e7;
-      --color-dress: #1b2123;
-      --color-accent: #609090;
-      --color-text: #306078;
-      --color-bg-overlay: rgba(255,250,250,0.9);
-    }
-    body {
-      margin:0;
-      padding:40px;
-      background-image: url('https://media1.tenor.com/m/IuadZ_DUSxYAAAAd/miyabi-hoshimi-miyabi.gif');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      font-family: "Poppins", "Noto Sans JP", sans-serif;
-      color: var(--color-text);
-      text-align: center;
-    }
-    .overlay {
-      background: var(--color-bg-overlay);
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 4px 20px rgba(69,116,123, 0.3);
-      border: 2px solid var(--color-accent);
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom:10px;
-      color: var(--color-accent);
-      font-weight:bold;
-    }
-    input {
-      width: 80%;
-      padding:10px;
-      margin-top:10px;
-      border:2px solid var(--color-accent);
-      border-radius:10px;
-      text-align:center;
-      font-size:1em;
-      color: var(--color-text);
-      background: #fff;
-    }
-    .category-buttons {
-      margin-top: 15px;
-    }
-    .category-buttons button {
-      margin:5px;
-      font-size:0.9em;
-      padding:8px 15px;
-    }
-    button.generate {
-      background: linear-gradient(90deg, var(--color-accent), var(--color-coat));
-      border:none;
-      color:#fff;
-      padding:12px 25px;
-      border-radius:20px;
-      font-size:1em;
-      cursor:pointer;
-      margin-top:15px;
-      transition:0.2s;
-      font-weight:bold;
-      letter-spacing:0.5px;
-    }
-    button.generate:hover {
-      background: linear-gradient(90deg, var(--color-coat), var(--color-accent));
-      transform:scale(1.05);
-    }
-    .result {
-      margin-top:20px;
-      font-size:1.1em;
-      color: var(--color-hair);
-    }
-    .divider {
-      width:60%;
-      height:2px;
-      background: linear-gradient(to right, transparent, var(--color-accent), transparent);
-      margin:15px auto;
-    }
-    .jumping-img {
-      width: 300px;
-      height: 300px;
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      display: inline-block;
-      animation: jump 0.5s ease-in-out infinite;
-    }
-    @keyframes jump {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miyabi Workout Generator 🌸</title>
+<style>
+  body {
+    background-image: url("https://media1.tenor.com/m/IuadZ_DUSxYAAAAd/miyabi-hoshimi-miyabi.gif");
+    background-size: cover;       /* aby pokryl celou obrazovku */
+    background-position: center;  /* střed GIFu */
+    background-repeat: no-repeat; /* jen jeden GIF */
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    text-align: center;
+  }
+
+  h1 {
+    text-shadow: 0 0 10px #00b4ff;
+  }
+
+  input {
+    width: 250px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: center;
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  button {
+    background: #00b4ff;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #0094cc;
+    transform: translateY(-3px);
+    box-shadow: 0 0 10px #00b4ff;
+  }
+
+  .result {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  a {
+    color: #00b4ff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+  .generate {
+  background: #00b4ff;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.2s;
+  cursor: pointer;
+  margin-top: 20px; 
+}
+p{
+  color: black;
+  text-shadow: 0 0 10px #00b4ff;
+}
+</style>
 </head>
 <body>
-  <div class="overlay">
-    <h1> Miyabi Workout Generator </h1>
-    <p>Enter your time and pick a category:</p>
-    <input type="number" id="timeInput" placeholder="Minutes" min="1"><br>
 
-    <div class="category-buttons">
-      <button onclick="selectCategory('arms')">💪 Arms</button>
-      <button onclick="selectCategory('legs')">🦵 Legs</button>
-      <button onclick="selectCategory('core')">🌿 Core</button>
-      <button onclick="selectCategory('full')">✨ Full Body</button>
-    </div>
+<h1>Miyabi Workout Generator </h1>
+<p>Enter your time and pick a category:</p>
+<input type="number" id="timeInput" placeholder="Minutes" min="1">
 
-    <button class="generate" onclick="generateWorkout()">✨ Generate Workout ✨</button>
-    <div class="divider"></div>
-    <div class="result" id="result"></div>
-  </div>
+<div class="container">
+  <button onclick="selectCategory('arms')">💪 Arms</button>
+  <button onclick="selectCategory('legs')">🦵 Legs</button>
+  <button onclick="selectCategory('core')">🌿 Core</button>
+  <button onclick="selectCategory('full')">✨ Full Body</button>
+</div>
 
-  <img src="https://media.tenor.com/ZnsC08opLI8AAAAi/nah-id.gif" alt="" class="jumping-img">
+<button onclick="generateWorkout()" class="generate">✨ Generate Workout ✨</button>
+
+<div class="result" id="result"></div>
 
 <script>
-  let selectedCategory = 'full';
+let selectedCategory = 'full';
 
-  function selectCategory(cat) {
-    selectedCategory = cat;
-    const buttons = document.querySelectorAll('.category-buttons button');
-    buttons.forEach(btn => btn.style.border = '');
-    event.target.style.border = '2px solid var(--color-accent)';
+function selectCategory(cat) {
+  selectedCategory = cat;
+}
+
+const workouts = [
+  { name: "Jumping Jacks 💫", timePerSet: 2, category: "full", link: "https://www.youtube.com/watch?v=c4DAnQ6DtF8" },
+  { name: "Squats 🍑", timePerSet: 3, category: "legs", link: "https://www.youtube.com/watch?v=aclHkVaku9U" },
+  { name: "Arm Circles ✨", timePerSet: 2, category: "arms", link: "https://www.youtube.com/watch?v=6KPD7Mr7Yjk" },
+  { name: "Plank 🌿", timePerSet: 1, category: "core", link: "https://www.youtube.com/watch?v=pSHjTRCQxIw" },
+  { name: "High Knees 🎀", timePerSet: 2, category: "legs", link: "https://www.youtube.com/watch?v=8opcQdC-V-U" },
+  { name: "Lunges 💕", timePerSet: 3, category: "legs", link: "https://www.youtube.com/watch?v=QOVaHwm-Q6U" },
+  { name: "Dance Freestyle 💃", timePerSet: 3, category: "full", link: "https://www.youtube.com/watch?v=LvCeD5LCSbE" },
+  { name: "Butt Kicks 💫", timePerSet: 2, category: "legs", link: "https://www.youtube.com/watch?v=8QK2xVq0xvE" },
+  { name: "Soft Stretch 🌷", timePerSet: 1, category: "full", link: "https://www.youtube.com/watch?v=t8w3c1jYyis" },
+  { name: "Side Bends 🌼", timePerSet: 2, category: "core", link: "https://www.youtube.com/watch?v=R0AbTdh9IYw" },
+  { name: "Calf Raises 🦶", timePerSet: 2, category: "legs", link: "https://www.youtube.com/watch?v=YMmgqO8Jo-k" },
+  { name: "Mini Jumps 🌈", timePerSet: 1, category: "full", link: "https://www.youtube.com/watch?v=gtlOOg4ZtL8" },
+  { name: "Shadow Boxing 🥊", timePerSet: 2, category: "arms", link: "https://www.youtube.com/watch?v=t8xY4F4fbd8" },
+  { name: "Shoulder Taps ✋", timePerSet: 1, category: "arms", link: "https://www.youtube.com/watch?v=JRtR3yFJLMk" },
+  { name: "Leg Raises 💠", timePerSet: 2, category: "core", link: "https://www.youtube.com/watch?v=JB2oyawG9KI" },
+  { name: "Mountain Climbers ⛰️", timePerSet: 2, category: "full", link: "https://www.youtube.com/watch?v=nmwgirgXLYM" }
+];
+
+function generateWorkout() {
+  const minutes = parseInt(document.getElementById("timeInput").value);
+  const resultDiv = document.getElementById("result");
+
+  if (!minutes || minutes <= 0) {
+    resultDiv.innerHTML = "Please enter a valid number of minutes!";
+    return;
   }
 
-  const workouts = [
-    { name: "Jumping Jacks 💫", timePerSet: 2, category: "full" },
-    { name: "Squats 🍑", timePerSet: 3, category: "legs" },
-    { name: "Arm Circles ✨", timePerSet: 2, category: "arms" },
-    { name: "Plank 🌿", timePerSet: 1, category: "core" },
-    { name: "High Knees 🎀", timePerSet: 2, category: "legs" },
-    { name: "Lunges 💕", timePerSet: 3, category: "legs" },
-    { name: "Dance Freestyle 💃", timePerSet: 3, category: "full" },
-    { name: "Butt Kicks 💫", timePerSet: 2, category: "legs" },
-    { name: "Soft Stretch 🌷", timePerSet: 1, category: "full" },
-    { name: "Side Bends 🌼", timePerSet: 2, category: "core" },
-    { name: "Calf Raises 🦶", timePerSet: 2, category: "legs" },
-    { name: "Mini Jumps 🌈", timePerSet: 1, category: "full" },
-    { name: "Shadow Boxing 🥊", timePerSet: 2, category: "arms" }
-  ];
+  const filteredWorkouts = workouts.filter(w => selectedCategory === 'full' || w.category === selectedCategory);
+  let total = 0;
+  let plan = [];
 
-  async function generateWorkout() {
-    const minutes = parseInt(document.getElementById("timeInput").value);
-    const apiKey = document.getElementById("apiKey").value.trim();
- // replace with your API key
-    const resultDiv = document.getElementById("result");
-
-    if (!minutes || minutes <= 0) {
-      resultDiv.innerHTML = "Please enter a valid number of minutes, lovely!";
-      return;
-    }
-
-    resultDiv.innerHTML = "Generating your workout… ⚔️";
-
-    if (apiKey) {
-      // AI-generated workout via OpenAI
-      try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: "You are an elegant anime-style trainer inspired by Hoshimi Miyabi from Zenless Zone Zero. Provide bodyweight workouts for no equipment." },
-              { role: "user", content: `I have ${minutes} minutes and I want a ${selectedCategory}-focused workout. No equipment. Please make it cute and powerful like Miyabi.` }
-            ]
-          })
-        });
-
-        const data = await response.json();
-        if (data.error) {
-          resultDiv.innerHTML = `<span style="color:red;">Error: ${data.error.message}</span>`;
-          return;
-        }
-
-        const message = data.choices[0].message.content;
-        resultDiv.innerHTML = `<strong>Your ${minutes}-minute Miyabi-style ${selectedCategory} workout 💖</strong><br><br>${message.replace(/\n/g, "<br>")}`;
-
-      } catch (err) {
-        console.error(err);
-        resultDiv.innerHTML = "Oops! Something went wrong with AI. 😢 Using offline version instead.";
-        generateOfflineWorkout(minutes);
-      }
+  while (total < minutes) {
+    const exercise = filteredWorkouts[Math.floor(Math.random() * filteredWorkouts.length)];
+    if (total + exercise.timePerSet <= minutes) {
+      plan.push(exercise);
+      total += exercise.timePerSet;
     } else {
-      generateOfflineWorkout(minutes);
+      break;
     }
   }
 
-  function generateOfflineWorkout(minutes) {
-    const resultDiv = document.getElementById("result");
-    const filteredWorkouts = workouts.filter(w => selectedCategory === 'full' || w.category === selectedCategory);
-
-    let total = 0;
-    let plan = [];
-    while (total < minutes) {
-      const exercise = filteredWorkouts[Math.floor(Math.random() * filteredWorkouts.length)];
-      if (total + exercise.timePerSet <= minutes) {
-        plan.push(exercise.name);
-        total += exercise.timePerSet;
-      } else {
-        break;
-      }
-    }
-
-    if (plan.length === 0) {
-      resultDiv.innerHTML = "Hmm… that’s very short time. Try at least 1 minute!";
-    } else {
-      resultDiv.innerHTML = `<strong>Your ${minutes}-minute Miyabi-inspired ${selectedCategory}-workout 💖</strong><br><br>${plan.join("<br>")}<br><br>Move with grace and strength, like Miyabi.`;
-    }
+  if (plan.length === 0) {
+    resultDiv.innerHTML = "Hmm… that’s very short time. Try at least 1 minute!";
+  } else {
+    const list = plan.map(ex => `<a href="${ex.link}" target="_blank">${ex.name}</a>`).join("<br>");
+    resultDiv.innerHTML = `<strong>Your ${minutes}-minute Miyabi-inspired ${selectedCategory} workout 💖</strong><br><br>${list}<br><br>Move with grace and strength, like Miyabi.`;
   }
+}
 </script>
 
 </body>
